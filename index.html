@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Politics and Administration</title>
+  <style>
+    body {
+      font-family: 'Ludida Console';
+    }
+    /* Style for the toggle buttons */
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    /* Style for the active (toggled) buttons */
+    button.active {
+      background-color: #28a745;
+    }
+    textarea {
+      width: 80%;
+      max-width: 100%;
+      /* Ensure it doesn't exceed the viewport width */
+      box-sizing: border-box;
+      /* Include padding and border in the width calculation */
+    }
+    #input1 {
+      width: 20%;
+      box-sizing: border-box;
+      /* Include padding and border in the width calculation */
+    }
+    /* Add CSS for green and red backgrounds based on the match */
+    .match {
+      background-color: #28a745;
+      /* Green */
+    }
+    .no-match {
+      background-color: #dc3545;
+      /* Red */
+    }
+    /* New style for the output */
+    /* New style for the output */
+    .jkl-details {
+      display: none;
+      /*this stop the detail content from displaying atutomatically.remove it if needed*/
+      font-size: small;
+      font-style: italic;
+
+      /* Add other styles as needed */
+    }
+    .details-content {
+      font-size: small;
+      font-style: italic;
+      /* Add other styles as needed */
+    }
+    #abbr {
+      display: contents;
+    }
+  </style>
+</head>
+<body>
+  <h1>Politics and Administration</h1>
+  <label for="input0">Parking1:</label>
+  <textarea id="input0" placeholder="Enter text for Input 0:heading"></textarea><br>
+  <label for="input00">Parking2:</label>
+  <textarea id="input00" placeholder="Enter text for Input 00:heading"></textarea><br>
+  <button id="saveStateButton" onclick="savePageState()">Save State</button>
+  <button id="loadStateButton" onclick="loadPageState()">Load State</button><br><br>
+  <label for="input1">Input 1:</label>
+  <textarea id="input1" oninput="autoPopulateInputs()" placeholder="Enter text for Input 1:ID"></textarea>
+  <select id="pick">
+    <option value=""></option>
+    <option value="">111</option>
+    <option value="">112</option>
+    <option value="">902</option>
+  </select><br>
+  <label for="input2">Input 2:</label>
+  <textarea id="input2" placeholder="Enter text for Input 2:heading"></textarea><br>
+  <label for="input3">Input 3:</label>
+  <textarea id="input3" placeholder="Enter text for Input 3:content"></textarea><br>
+  <label for="input4">Input 4:</label>
+  <textarea id="input4" placeholder="Enter text for Input 4:fn1"></textarea><br>
+  <label for="input5">Input 5:</label>
+  <textarea id="input5" placeholder="Enter text for Input 5:fn2"></textarea><br>
+  <label for="input6">Input 6:</label>
+  <textarea id="input6" placeholder="Enter text for Input 6:fn3"></textarea><br>
+  <label for="input7">Input 7:</label>
+  <textarea id="input7" placeholder="Enter text for Input 7:title"></textarea><br>
+  <label for="input8">Input 8:</label>
+  <textarea id="input8" placeholder="Enter text for Input 8:link"></textarea><br>
+  <label for="input9">Input 9:</label>
+  <textarea id="input9" placeholder="Enter text for Input 9:accessed on:"></textarea><br>
+  <label for="input10">Input 10:</label>
+  <textarea id="input10" placeholder="Enter text for Input 10:Keywords"></textarea><br>
+  <button id="showButton" onclick="toggleABC()">Show ABC</button>
+  <p id="output" style="display: none;"></p>
+  <!-- Add the Show All JKL button -->
+  <button id="showAllJKLButton" onclick="toggleAllJKL()">Show All JKL</button>
+  <!-- Add the Show LMN button -->
+  <button id="showLMNButton" onclick="toggleLMN()">Show LMN</button>
+  <!--content of jkl is visible here-->
+  <div id="jklContainer"></div>
+  <!--content of lmn is visible here-->
+  <div id="lmnContent" style="display: none;">
+    <p id="lmnOutput"></p>
+    <div id="lmnDetails" style="display: none;">
+      <!-- Detailed content will be added here -->
+    </div>
+  </div>
+  </div>
+  <script>
+    var valuesArray = [
+{input1: "111", input2: "&#x003C;b&#x003E;&#x003C;u&#x003E; Crisis of Goodwill:&#x003C;/u&#x003E;&#x003C;/b&#x003E;Article by Umesh Mainali", input3: " Breach of Social Contract Theory, Legitimacy Crisis, Campaign Against Government, Spiritualization of Employees, Quotes ", input4: "• &#x003C;b&#x003E;Democracy: &#x003C;/b&#x003E;In democracy, the sovereign citizens trust and give their representatives both rights and resources. &#x003C;br&#x003E; • &#x003C;b&#x003E;Constitutional Bodies: &#x003C;/b&#x003E;Apart from the SOP & CBP the constitution has made provision for various constitutional bodies to make the government self-controlled, self-restraint and not arbitrarily perform sensitive function. &#x003C;br&#x003E; • &#x003C;b&#x003E;State: &#x003C;/b&#x003E;The ends of the state and its institutions is the welfare of the people. &#x003C;br&#x003E; • &#x003C;b&#x003E;Accountability: &#x003C;/b&#x003E;The lack of accountability is theoretically the breach of social contract theory and practically government suffers from legitimacy crisis due to lack of trust. &#x003C;br&#x003E; • &#x003C;b&#x003E;Pork Barreling: &#x003C;/b&#x003E;Legislature is being criticized for being more interested in 'pork barreling', increasing its own services and performing executive function, rather than creating laws according to society's demands. &#x003C;br&#x003E; &#x003C;b&#x003E;&#x003C;u&#x003E;Campaign Against Governments:&#x003C;/u&#x003E;&#x003C;/b&#x003E;1. Black life Matters in US; &#x003C;br&#x003E; 2.Hardik Patel's Anti-Reservation Campaign in Gujarat; &#x003C;br&#x003E; 3. Enough is Enough in Nepal; 4. Nilhism in Russia. &#x003C;br&#x003E;&#x003C;b&#x003E;&#x003C;u&#x003E;Quotes: &#x003C;/u&#x003E;&#x003C;/b&#x003E; • 'Politics without principles, business without ethics, worship without faith has no meaning-Mahatma Gandhi &#x003C;br&#x003E;• Government is a trust and its officials are trustees- Henry Clay(American politician) &#x003C;br&#x003E;• No one lives in ivory tower&#x003C;br&#x003E;• 'Money is the sixth sense and without it the other five senses do not function.'-Somerset Maugham&#x003C;br&#x003E; • Public opinion is like a blind, strong demon that can be easily manipulated, but can be terrible when angered.-Bismark&#x003C;br&#x003E;• The crowd has only the head and no brain, but one should learn a lot from the wisdom of the crowd. &#x003C;br&#x003E; ", input5: "&#x003C;b&#x003E;&#x003C;u&#x003E;Orbiter Dicta: &#x003C;/u&#x003E;&#x003C;/b&#x003E; • A system is made up of principles, institutions and processes.&#x003C;br&#x003E; • Nihilism, also known as autocratic individualism of youth, was born in Russia in the nineteenth century in the name of opposition to government policies. Those who do not accept authority, do not follow religion, It was a kind of 'destructionism' that did not live in family life, which all European governments combined to suppress. &#x003C;br&#x003E;• State is for the protection wealth and wives*&#x003C;br&#x003E; &#x003C;b&#x003E;&#x003C;u&#x003E;Spiritualization of Employees: &#x003C;/u&#x003E;&#x003C;/b&#x003E;1. Newly recruited officers in Japan are first sent to a training institution called 'down to earth training' called 'Nippon Recruit Center' where humanitarian values ​​are taught. &#x003C;br&#x003E; 2. In Thailand, newly recruited police officers are given spiritual education by keeping them with monks in Buddhist monasteries. &#x003C;br&#x003E; 3.Bippasyana Meditation during service entry training was brought to practice but lacked continuation in Nepal.* &#x003C;br&#x003E;&#x003C;b&#x003E;&#x003C;u&#x003E;Concluding Remarks: &#x003C;/u&#x003E;&#x003C;/b&#x003E; If politics can be purified and administration can be commercialized, the 'missing link' with the people can be found again.&#x003C;br&#x003E;", input6: "Note:*these are added from the reader's side&#x003C;br&#x003E;", input7: "साखको संकट, उमेश मैनाली ", input8: "https://ekantipur.com/opinion/2020/08/17/1597628521249281.html", input9: ", Article of 1 Bhadra, 2077", input10: "Umesh Mainali, government, bureaucracy, kantipur"},
+
+{input1: "112", input2: "&#x003C;u&#x003E;Why was not new Nepal formed?&#x003C;/u&#x003E;", input3: " Examplery leaders, Kleptocrats, Failed State, Quotes on politics and administration", input4: "", input5: "&#x003C;br&#x003E;&#x003C;b&#x003E;&#x003C;u&#x003E;Examplery Leaders: &#x003C;/u&#x003E;&#x003C;/b&#x003E;1. Nelson Mandela transforming South Africa; &#x003C;br&#x003E;2. Lee Kuan Yew transforming Singapore; &#x003C;br&#x003E;3. Mahathir transforming Malaysia; &#x003C;br&#x003E;4. Gandhi, Churchill, Kennedy and Deng Xiao Peng- the idea innovators; &#x003C;br&#x003E;5. Murray MacLehose controlling corruption in HongKong &#x003C;br&#x003E;&#x003C;b&#x003E;&#x003C;u&#x003E;Kleptocrats: &#x003C;/u&#x003E;&#x003C;/b&#x003E;1. Joseph Mobutu of Congo was a kleptocrat (after liberation of Congo from Belgium Colony built no. of palaces for himself) &#x003C;br&#x003E;2. Mengetsu of Ethiopia after the coup of 1972 started to live like an emperor.(not riding in a car, not wearing a suit, or wearing a neck tie is considered a crime.) &#x003C;br&#x003E;3. Mugabe of Zimbawe was as Sanki Ruler (Mugabe's dictatorship in Zimbabwe, poverty in the country reached its peak. (In the year 2000, the government bank 'Zimbank' introduced a program to open a 'lottery' with the participation of account holders. His Excellency Robert Mugabe came out when the lottery was drawn.) &#x003C;br&#x003E; Saika Stevens of Sierra Leone (during the autocratic regime of Saika Stevens, employees were not paid, television and radio broadcasts were stopped) &#x003C;br&#x003E; &#x003C;b&#x003E;&#x003C;u&#x003E;Quotes: &#x003C;/u&#x003E;&#x003C;/b&#x003E;•  The current autocracy does not come from guns and cannons, but through law.(see justification below) &#x003C;br&#x003E;• The right leader, good protection and good order are indispensable for good state-Plato &#x003C;br&#x003E;• This chair of the presidency belongs neither to the family of lions nor to the breed of eagles'. &#x003C;br&#x003E;• Society and state are considered as highly moral organizations. &#x003C;br&#x003E;• The danger of the country does not come from outside, 'If destruction is our destiny, we will be the authors and perpetrators of it-Abraham Lincoln &#x003C;br&#x003E;• Being small doesn't make nationality small. &#x003C;br&#x003E;• No one comes from an ivory tower, everyone is a reflection of society. &#x003C;br&#x003E;• leaders are to 'rule' and administration is to be 'governance'.(नेताहरूले ‘राज’ गर्ने हो प्रशासनले ‘शासन’ भन्ने मान्यता नै बनेको छ ।) &#x003C;br&#x003E;•  'Everything comes from its opposite.' Good comes from bad, hope comes from despair, development comes from underdevelopment-Socrates &#x003C;br&#x003E;• When security personnel are treated like 'home guards' and 'employees' are treated like servants, everything seems to be deteriorating. &#x003C;br&#x003E;•  The country is constituted of the elderly and children, the government is made up of the sick and elderly, the economy is made up of brokers and two-number traders then how a new Nepal forms? &#x003C;br&#x003E;•  Two main things are necessary for the stability of a democratic system- &#x003C;br&#x003E;1. the ability of political leaders to solve the problems faced by the society without looking for political gain and &#x003C;br&#x003E; 2. the ability of the people to separate the government and the political system- Huntington &#x003C;br&#x003E;•  No one comes from an ivory tower, everyone is a reflection of society. &#x003C;br&#x003E;• 'The nation is sick, there is darkness everywhere, but I know that only when it is dark can you see the stars-Martin Luther King ", input6: "&#x003C;br&#x003E;&#x003C;b&#x003E;&#x003C;u&#x003E;Obiter Dicta:&#x003C;/u&#x003E;&#x003C;/b&#x003E;• Lee Kuan Yew has mentioned some of his contemporary dictators in his famous book 'From Third World to First World'viz. Suharto of Indonesia, Macros of Phillipines, Stroessner of Paraguay.&#x003C;br&#x003E; In Indonesia, the entire economy was under the control of dictator Suharto's children. He has written about son Tommy's monopoly in the car business, daughter Tutut's monopoly in the hydropower sector and other sons' monopoly in banking license. Suharto was accused of corruption by subcontracting customs collection work to a Swiss company. Due to the corrupt rule of Marcos, the dictator of the Philippines, the country was becoming poor despite the huge American aid. His wife Imelda Marcos had a very luxurious life. Stroessner, the despotic ruler of Paraguay, used to make the high officials of the state engage in the illegal drug trade. Such despotic and 'kleptocratic' rulers left with the stigma of ruining the country. &#x003C;br&#x003E;•  Examples of those totalitarians (सर्वसत्तावादी) who are elected through democratic methods are: Indira Gandhi, Marcos, Suharto, Mugabe. Peru's Fujimori is called a 'populist dictator'. &#x003C;br&#x003E;&#x003C;b&#x003E;&#x003C;u&#x003E;History: &#x003C;/u&#x003E;&#x003C;/b&#x003E;• The republic failed due to the arrogance and despotic thinking of the Jacobin leaders who led the French Revolution, which is considered the ideal of the revolution. Due to their terror, the monarchy returned twice. &#x003C;br&#x003E;• The revolutionary leader Hebert destroyed the churches and started a religion called 'Worship of Wisdom'. Robespierre killed him and started a religion called 'the worship of the Almighty'. He was also hanged on the guillotine and killed. &#x003C;br&#x003E;• The speech of some good employees within the organization has not been able to be heard, while the voice of the corrupt is being raised to the top. &#x003C;br&#x003E;• When our other neighbor China claimed Mount Everest and killed people by shooting inside Nepal's territory, the then Prime Minister Vishweshwar Prasad Koirala resolved the problem by strongly protesting. &#x003C;br&#x003E;•  Before the revolution in France, Voltaire, Montesquieu and Rousseau led an intellectual awakening. Poet in Nepal too, Writers and intellectuals added energy to every revolution.&#x003C;br&#x003E; &#x003C;b&#x003E;&#x003C;u&#x003E;Concluding Remark: &#x003C;/u&#x003E;&#x003C;/b&#x003E;ग्रिक दाशनिक सुकरातले भनेजस्तै ‘हरेक कुरा त्यसको विपर्यायबाट आउँछ ।’ खराबबाट राम्रो, निराशाबाट आशा। त्यस्तै अविकासबाट विकास अवश्य आउँछ।&#x003C;br&#x003E;", input7: "किन बनेन नयाँ नेपाल ? - उमेशप्रसाद मैनाली ", input8: "https://ekantipur.com/opinion/2023/06/26/168774443901955894.html, ", input9: "Published on: June 11, 2080 ", input10: "umesh prasad mainali, government, bureaucracy, new nepal, leaders, kleptocrats, ekantipur"},
+
+
+{ input1: "123", input2: "value12", input3: "value13", input4: "value14", input5: "value15&#x003C;b&#x003E;this is bold&#x003C;/b&#x003E;value1515&#x003C;br&#x003E;ok", input6: "value16", input7: "value17", input8: "value18", input9: "value19", input10: "{value0, value1}" },
+      { input1: "456", input2: "value22", input3: "value23", input4: "value24", input5: "value25", input6: "value26", input7: "value27", input8: "https://www.onlinekhabar.com/2023/08/1351895", input9: "value29", input10: "{value0, value2}" },
+      { input1: "901", input2: "&#x003C;b&#x003E;सासंद विकास कोष&#x003C;/b&#x003E;", input3: "", input4: "", input5: "", input6: "", input7: "सांसद विकास कोषको बजेट खर्च नगर्न सर्वोच्चको आदेश", input8: "https://www.onlinekhabar.com/2023/08/1354751", input9: ", news of:23 August, 2023", input10: "{sc1, gg1, parliament, budget, ioi1, cb1, sco1}" },
+      { input1: "902", input2: "", input3: "", input4: "", input5: "", input6: "", input7: "कोशी सरकारलाई दीर्घकालीन महत्वको निर्णय नगर्न सर्वोच्चको अन्तरिम आदेश", input8: "https://www.onlinekhabar.com/2023/08/1355308", input9: ", news on:24 August, 2023", input10: "{sc1, sb1, ipk1, io1, ioi1, sco1, pa1, higmat karki, uddav thapa, voc1, cm1, kp1, pc1, cm1, cm2, pg1}" },
+      // Add more values as needed
+    ];
+    var mainTextVisible = false;
+    var lmnContentVisible = false;
+    var lmnDetailsVisible = false;
+    //autopopulating the input fields
+    function autoPopulateInputs() {
+      var input1Value = document.getElementById("input1").value;
+      var matchingValue = valuesArray.find(function (item) {
+        return item.input1 === input1Value;
+      });
+      var input1Field = document.getElementById("input1");
+      if (matchingValue) {
+        input1Field.value = matchingValue.input1;
+        input1Field.classList.remove("no-match");
+        input1Field.classList.add("match");
+        // Rest of your code to populate other fields...
+      } else {
+        input1Field.value = input1Value;
+        input1Field.classList.remove("match");
+        input1Field.classList.add("no-match");
+      }
+      if (matchingValue) {
+        document.getElementById("input2").value = matchingValue.input2.replace(/</g, "&#x003C;").replace(/>/g, "&#x003E;");
+        document.getElementById("input3").value = matchingValue.input3.replace(/</g, "&#x003C;").replace(/>/g, "&#x003E;");
+        document.getElementById("input4").value = matchingValue.input4.replace(/</g, "&#x003C;").replace(/>/g, "&#x003E;");
+        document.getElementById("input5").value = matchingValue.input5.replace(/</g, "&#x003C;").replace(/>/g, "&#x003E;");
+        document.getElementById("input6").value = matchingValue.input6.replace(/</g, "&#x003C;").replace(/>/g, "&#x003E;");
+        document.getElementById("input7").value = matchingValue.input7.replace(/</g, "&#x003C;").replace(/>/g, "&#x003E;");
+        document.getElementById("input8").value = matchingValue.input8.replace(/</g, "&#x003C;").replace(/>/g, "&#x003E;");
+        document.getElementById("input9").value = matchingValue.input9.replace(/</g, "&#x003C;").replace(/>/g, "&#x003E;");
+        document.getElementById("input10").value = matchingValue.input10
+      } else {
+        document.getElementById("input2").value = "";
+        document.getElementById("input3").value = "";
+        document.getElementById("input4").value = "";
+        document.getElementById("input5").value = "";
+        document.getElementById("input6").value = "";
+        document.getElementById("input7").value = "";
+        document.getElementById("input8").value = "";
+        document.getElementById("input9").value = "";
+        document.getElementById("input10").value = "";
+      }
+    }
+    var showAllJKLButton = document.getElementById("showAllJKLButton");
+    var jklContainer = document.getElementById("jklContainer");
+    // Toggle the visibility of all JKL content
+    function toggleAllJKL() {
+      if (jklContainer.innerHTML === '') {
+        // Generate JKL content if it's empty
+        for (var i = 0; i < valuesArray.length; i++) {
+          var input1Value = valuesArray[i].input1;
+          var input2Value = valuesArray[i].input2.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+          var input3Value = valuesArray[i].input3.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+          var input4Value = valuesArray[i].input4.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+          var input5Value = valuesArray[i].input5.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+          var input6Value = valuesArray[i].input6.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+          var input7Value = valuesArray[i].input7.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+          var input8Value = valuesArray[i].input8.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+          var input9Value = valuesArray[i].input9.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+          var input10Value = valuesArray[i].input10;
+          var jklContentText = '<u>' + input1Value + ': ' + input2Value + '</b></u>' + input3Value + ' + ';
+          jklContentText += '<a href="javascript:void(0)" onclick="toggleJKLDetails(event, ' + i + ')">[' + (i + 1) + ']</a>';
+          jklContentText += '<div id="jklDetails_' + i + '" class="jkl-details">' + input1Value + ":" + input4Value + input5Value + input6Value + input7Value + '<a href="' + input8Value + '">' + input8Value + '</a>' + input9Value + '</div>';
+          var jklContent = document.createElement("div");
+          jklContent.innerHTML = jklContentText;
+          jklContainer.appendChild(jklContent);
+        }
+        showAllJKLButton.textContent = "Hide All JKL"; // Update button text
+        showAllJKLButton.classList.add("active"); // Add "active" class
+      } else {
+        // Clear JKL content if it's not empty
+        jklContainer.innerHTML = '';
+        showAllJKLButton.textContent = "Show All JKL"; // Update button text
+        showAllJKLButton.classList.remove("active"); // Remove "active" class
+      }
+    }
+    // Toggle the visibility of JKL details
+    function toggleJKLDetails(index) {
+      var detailsDiv = document.getElementById('jklDetails_' + index);
+      if (detailsDiv.style.display === 'none') {
+        detailsDiv.style.display = 'block';
+      } else {
+        detailsDiv.style.display = 'none';
+      }
+    }
+    // Toggle the visibility of LMN content
+    function toggleLMN() {
+      var lmnContent = document.getElementById("lmnContent");
+      var showLMNButton = document.getElementById("showLMNButton");
+      lmnContentVisible = !lmnContentVisible;
+      if (lmnContentVisible) {
+        var input1Value = document.getElementById("input1").value;
+        var input2Value = document.getElementById("input2").value.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+        var input3Value = document.getElementById("input3").value.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+        var input4Value = document.getElementById("input4").value.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+        var input5Value = document.getElementById("input5").value.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+        var input6Value = document.getElementById("input6").value.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+        var input7Value = document.getElementById("input7").value.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+        var input8Value = document.getElementById("input8").value.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+        var input9Value = document.getElementById("input9").value.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+        var input10Value = document.getElementById("input10").value;
+        var lmnContentText = '<u>' + input1Value + ': ' + input2Value + '</b></u>' + input3Value + ' + ';
+        lmnContentText += '<a href="javascript:void(0)" onclick="toggleDetails()">[Details]</a>';
+        document.getElementById("lmnOutput").innerHTML = lmnContentText;
+        lmnContent.style.display = "block";
+        showLMNButton.textContent = "Hide LMN";
+        showLMNButton.classList.add("active"); // Add "active" class
+      } else {
+        lmnContent.style.display = "none";
+        showLMNButton.textContent = "Show LMN";
+        hideDetails();
+        showLMNButton.classList.remove("active"); // Remove "active" class
+        hideDetails(); // Also call hideDetails when hiding LMN
+      }
+    }
+    // Toggle the visibility of LMN details
+    function toggleDetails() {
+      var lmnDetails = document.getElementById("lmnDetails");
+      lmnDetailsVisible = !lmnDetailsVisible;
+      if (lmnDetailsVisible) {
+        var input1Value = document.getElementById("input1").value;
+        var input2Value = document.getElementById("input2").value.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+        var input3Value = document.getElementById("input3").value.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+        var input4Value = document.getElementById("input4").value.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+        var input5Value = document.getElementById("input5").value.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+        var input6Value = document.getElementById("input6").value.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+        var input7Value = document.getElementById("input7").value.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+        var input8Value = document.getElementById("input8").value.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+        var input9Value = document.getElementById("input9").value.replace(/&#x003C;/g, "<").replace(/&#x003E;/g, ">");
+        var input10Value = document.getElementById("input10").value;
+        var detailsContent = '<div class="details-content">' + input1Value + ':' + input4Value + input5Value + input6Value + input7Value + '<a href="' + input8Value + '">' + input8Value + '</a>' + input9Value + '</div>';
+        lmnDetails.innerHTML = detailsContent;
+        lmnDetails.style.display = "block";
+      } else {
+        lmnDetails.style.display = "none";
+      }
+    }
+    // Hide the details
+    function hideDetails() {
+      var lmnDetails = document.getElementById("lmnDetails");
+      lmnDetails.style.display = "none";
+      lmnDetailsVisible = false;
+    }
+    // Function to format the date as "dd Month Name, yyyy-hrhr:minmin"into input field 9
+    function formatDate(date) {
+      const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
+      const day = date.getDate();
+      const monthName = months[date.getMonth()];
+      const year = date.getFullYear();
+      const hours = date.getHours().toString().padStart(2, '0'); // Add leading zero if necessary
+      const minutes = date.getMinutes().toString().padStart(2, '0'); // Add leading zero if necessary
+      return `, Accessed on:${day} ${monthName}, ${year}-${hours}:${minutes}`;
+    }
+    // Function to handle the Ctrl + D + T key combination
+    function handleCtrlDT(event) {
+      if (event.ctrlKey && event.key === "d") {
+        // Prevent the default behavior of the key combination
+        event.preventDefault();
+        // Generate the current date and time in the desired format
+        const currentDate = new Date();
+        const formattedDate = formatDate(currentDate);
+        // Insert the formatted date into input 9
+        document.getElementById("input9").value = formattedDate;
+      }
+    }
+    // Add an event listener to the document for keydown events
+    document.addEventListener("keydown", handleCtrlDT);
+    // Toggle the visibility of ABC content
+    var mainTextVisible = false; // Declare the variable
+    function toggleABC() {
+      var output = document.getElementById("output");
+      var showButton = document.getElementById("showButton");
+      mainTextVisible = !mainTextVisible;
+      if (mainTextVisible) {
+        var input1Value = document.getElementById("input1").value;
+        var input2Value = document.getElementById("input2").value;
+        var input3Value = document.getElementById("input3").value;
+        var input4Value = document.getElementById("input4").value;
+        var input5Value = document.getElementById("input5").value;
+        var input6Value = document.getElementById("input6").value;
+        var input7Value = document.getElementById("input7").value;
+        var input8Value = document.getElementById("input8").value;
+        var input9Value = document.getElementById("input9").value;
+        var input10Value = document.getElementById("input10").value;
+        output.textContent = '{input1: "' + input1Value + '", input2: "' + input2Value + '", input3: "' + input3Value + '", input4: "' + input4Value + '", input5: "' + input5Value + '", input6: "' + input6Value + '", input7: "' + input7Value + '", input8: "' + input8Value + '", input9: "' + input9Value + '", input10: "' + input10Value + '"}' + ",";
+        showButton.innerHTML = "Hide ABC";
+        showButton.classList.add("active"); // Add "active" class
+        output.style.display = "block";
+        showButton.textContent = "Hide ABC";
+      } else {
+        output.style.display = "none";
+        showButton.textContent = "Show ABC";
+        showButton.innerHTML = "Show ABC";
+        showButton.classList.remove("active"); // Remove "active" class}
+      }
+    }
+    //Using enter key etc. to enter #x003C;br&#x003E; etc. in input field
+    function addLineBreak(event) {
+      if (event.key === "Enter" && event.ctrlKey) {
+        event.preventDefault();
+        var input = event.target;
+        var cursorPosition = input.selectionStart;
+        var currentValue = input.value;
+        var newValue =
+          currentValue.substring(0, cursorPosition) +
+          "&#x003C;br&#x003E;" +
+          currentValue.substring(cursorPosition);
+        input.value = newValue;
+        input.setSelectionRange(cursorPosition + 19, cursorPosition + 19);
+      }
+      if (event.key === "b" && event.ctrlKey) {
+        event.preventDefault();
+        var input = event.target;
+        var cursorPosition = input.selectionStart;
+        var currentValue = input.value;
+        var newValue =
+          currentValue.substring(0, cursorPosition) +
+          "&#x003C;b&#x003E;" +
+          "&#x003C;/b&#x003E;" +
+          currentValue.substring(cursorPosition);
+        input.value = newValue;
+        input.setSelectionRange(cursorPosition + 17, cursorPosition + 17);
+      }
+      if (event.key === "u" && event.ctrlKey) {
+        event.preventDefault();
+        var input = event.target;
+        var cursorPosition = input.selectionStart;
+        var currentValue = input.value;
+        var newValue =
+          currentValue.substring(0, cursorPosition) +
+          "&#x003C;u&#x003E;" +
+          "&#x003C;/u&#x003E;" +
+          currentValue.substring(cursorPosition);
+        input.value = newValue;
+        input.setSelectionRange(cursorPosition + 17, cursorPosition + 17);
+      }
+      if (event.key === "q" && event.ctrlKey) {
+        event.preventDefault();
+        var input = event.target;
+        var cursorPosition = input.selectionStart;
+        var currentValue = input.value;
+        var newValue =
+          currentValue.substring(0, cursorPosition) +
+          "&amp;quot; &amp;quot;" +
+          currentValue.substring(cursorPosition);
+        input.value = newValue;
+        input.setSelectionRange(cursorPosition + 11, cursorPosition + 11);
+      }
+      if (event.key === "l" && event.ctrlKey) {
+        event.preventDefault();
+        var input = event.target;
+        var cursorPosition = input.selectionStart;
+        var currentValue = input.value;
+        var newValue =
+          currentValue.substring(0, cursorPosition) +
+          "&#x2022;" +
+          currentValue.substring(cursorPosition);
+        input.value = newValue;
+        input.setSelectionRange(cursorPosition + 10, cursorPosition + 10);
+      }
+    }
+    var inputFields = document.querySelectorAll("input, textarea");
+    inputFields.forEach(function (input) {
+      input.addEventListener("keydown", addLineBreak);
+    });
+  </script>
+  <!-- this script is for saving and loading the page from the very position -->
+  <script>
+    function savePageState() {
+      // Check if local storage is available
+      if (typeof Storage !== "undefined") {
+        // Create an object to store the page state
+        var pageState = {
+          inputValues: {},
+          mainTextVisible: mainTextVisible,
+          lmnContentVisible: lmnContentVisible,
+          lmnDetailsVisible: lmnDetailsVisible,
+          outputContent: document.getElementById("output").textContent,
+          showAllJKLButtonActive: showAllJKLButton.classList.contains("active"),
+          jklContainerContent: jklContainer.innerHTML,
+          showLMNButtonActive: showLMNButton.classList.contains("active"),
+          lmnOutputContent: document.getElementById("lmnOutput").innerHTML,
+          lmnDetailsContent: document.getElementById("lmnDetails").innerHTML,
+        };
+        // Store the input field values
+        var inputFields = document.querySelectorAll("input, textarea");
+        inputFields.forEach(function (input) {
+          pageState.inputValues[input.id] = input.value;
+        });
+        // Convert the object to JSON and store it in local storage
+        localStorage.setItem("pageState", JSON.stringify(pageState));
+        alert("Page state saved successfully!");
+      } else {
+        alert(
+          "Local storage is not available. Your browser may be in private mode or have local storage disabled. " +
+          "This feature requires local storage to work properly."
+        );
+      }
+    }
+    function loadPageState() {
+      // Check if local storage is available
+      if (typeof Storage !== "undefined") {
+        // Retrieve the saved page state from local storage
+        var savedState = localStorage.getItem("pageState");
+        if (savedState) {
+          // Parse the JSON and restore the state
+          var pageState = JSON.parse(savedState);
+          // Restore input field values
+          for (var inputId in pageState.inputValues) {
+            var inputValue = pageState.inputValues[inputId];
+            document.getElementById(inputId).value = inputValue;
+          }
+          // Restore visibility states
+          mainTextVisible = pageState.mainTextVisible;
+          lmnContentVisible = pageState.lmnContentVisible;
+          lmnDetailsVisible = pageState.lmnDetailsVisible;
+          // Toggle visibility based on restored states
+          if (mainTextVisible) {
+            toggleABC();
+          }
+          if (lmnContentVisible) {
+            toggleLMN();
+          }
+          if (lmnDetailsVisible) {
+            toggleDetails();
+          }
+          // Restore output content and button states
+          document.getElementById("output").textContent = pageState.outputContent;
+          if (pageState.showAllJKLButtonActive) {
+            toggleAllJKL();
+          }
+          jklContainer.innerHTML = pageState.jklContainerContent;
+          if (pageState.showLMNButtonActive) {
+            toggleLMN();
+          }
+          document.getElementById("lmnOutput").innerHTML = pageState.lmnOutputContent;
+          document.getElementById("lmnDetails").innerHTML = pageState.lmnDetailsContent;
+          alert("Page state loaded successfully!");
+        } else {
+          alert("No saved state found.");
+        }
+      } else {
+        alert(
+          "Local storage is not available. Your browser may be in private mode or have local storage disabled. " +
+          "This feature requires local storage to work properly."
+        );
+      }
+    }
+  </script>
+  <!-- script for preventing scroll to top on click of hyperlink -->
+  <script>
+    function toggleJKLDetails(event, index) {
+      event.preventDefault(); // Prevent the default anchor behavior
+      var detailsDiv = document.getElementById('jklDetails_' + index);
+      // Toggle the display of the clicked detail
+      if (detailsDiv.style.display === 'block') {
+        detailsDiv.style.display = 'none'; // Close the clicked detail
+      } else {
+        // Close all open details, (एउटा लिङ्क खोल्दा अर्को लिङ्कको content बन्द नगर्ने भए यो ३ लाइन हटाइदिनुहोस्)
+        var allDetails = document.querySelectorAll('.jkl-details');
+        allDetails.forEach(function (detail) {
+          detail.style.display = 'none';
+        });
+        // Open the clicked detail
+        detailsDiv.style.display = 'block';
+      }
+    }
+  </script><textarea id="filterInput" placeholder="Enter filter command here"></textarea>
+  <button id="filterButton">Hide Filtered Content</button>
+  <div id="filteredContainer"></div>
+  <script>
+    // Function to display a message in a pop-up window
+    function displayMessage(message) {
+      alert(message); // You can replace 'alert' with a more customized pop-up dialog.
+    }
+    // Function to hide the filtered content
+    function hideFilteredContent() {
+      var filteredContainer = document.getElementById('filteredContainer');
+      filteredContainer.style.display = 'none';
+    }
+    // Function to show the filtered content
+    function showFilteredContent() {
+      var filteredContainer = document.getElementById('filteredContainer');
+      filteredContainer.style.display = 'block';
+    }
+    // Function to clear the filtered content
+    function clearFilteredContent() {
+      var filteredContainer = document.getElementById('filteredContainer');
+      filteredContainer.innerHTML = ''; // Clear the content
+    }
+    // Function to apply the filter
+    function applyFilter(filter) {
+      // Clear the filtered container
+      clearFilteredContent();
+      // Iterate through the data array and apply the filter
+      valuesArray.forEach(function (item, index) {
+        var input10 = item.input10;
+        var filtered = false;
+        // Split the filter into terms using spaces
+        var filterTerms = filter.split(' ');
+        // Variables to track the current logical operator and result
+        var currentOperator = 'AND'; // Default to AND
+        var currentResult = true;
+        // Process each term in the filter
+        filterTerms.forEach(function (term) {
+          if (term.toUpperCase() === 'AND') {
+            currentOperator = 'AND';
+          } else if (term.toUpperCase() === 'OR') {
+            currentOperator = 'OR';
+          } else if (term.toUpperCase() === 'NOT') {
+            currentOperator = 'NOT';
+          } else {
+            if (currentOperator === 'AND') {
+              currentResult = currentResult && input10.includes(term);
+            } else if (currentOperator === 'OR') {
+              currentResult = currentResult || input10.includes(term);
+            } else if (currentOperator === 'NOT') {
+              currentResult = currentResult && !input10.includes(term);
+            }
+          }
+        });
+        // After processing all terms, the currentResult contains the final result
+        filtered = currentResult;
+        // If filtered, display the item in the filtered container
+        if (filtered) {
+          var filteredContainer = document.getElementById('filteredContainer');
+          var itemDiv = document.createElement('div');
+          itemDiv.textContent = 'Item ' + (index + 1) + ': ' + JSON.stringify(item);
+          filteredContainer.appendChild(itemDiv);
+        }
+      });
+      // If no matches are found, display a message in a pop-up window
+      var filteredContainer = document.getElementById('filteredContainer');
+      if (filteredContainer.childElementCount === 0) {
+        displayMessage("No matches found.");
+      } else {
+        showFilteredContent();
+      }
+    }
+    // Event listener for the filter button
+    var filterButton = document.getElementById('filterButton');
+    filterButton.addEventListener('click', function () {
+      var filterInput = document.getElementById('filterInput').value;
+      var buttonText = filterButton.textContent;
+      if (buttonText === 'Hide Filtered Content') {
+        // Hide all filtered content and toggle button text
+        hideFilteredContent();
+        filterButton.textContent = 'Show Filtered Content';
+      } else {
+        // Apply the filter and toggle button text
+        applyFilter(filterInput);
+        filterButton.textContent = 'Hide Filtered Content';
+      }
+    });
+  </script>
+  </script>
+  <a id="BOTTOM"></a>
+  <footer>
+    <div id="abbr">
+      <p>
+        <br>cb1=constitutional bench (संवैधानिक इजलास)
+        <br>coni0=certiorari order not issued 
+        <br>coi1=certiorari order issued 
+        <br>db1=double bench (संयुक्त इजलास)
+        <br>efb5=extended full bench of five judges 
+        <br>fb1=full bench(पूर्ण इजलास)
+        <br>ioi1=interim order issued (अन्तरिम आदेश जारी)
+        <br>ioni0=interim order not issued (अन्तरिम आदेश जारी नहुने)
+        <br>moni0=mandatory order not issued
+        <br>moi1=mandatory order issued (उत्प्रेषण)
+        <br>pg1=preference given (अग्राधिकार)
+        <br>sb1=single bench (एकल इजलास)
+        <br>sc1=supreme court(सर्वोच्च अदालत)
+        <br>sco0=show caused ordered not issued  (कारण देखाउन आदेश जारी नहुने)
+        <br>sco1=show cause order issued (कारण देखाउ आदेश जारी)
+        <br>wi1=writ issued (रिट जारी)
+        <br>wip1=writ issued partially (रिट जारी आंशिक)
+        <br>wq1=writ quashed (रिट खारेज)
+        <br>kp1=koshi province
+        <br>pa1=province assembly
+        <br>cm1=constitutional morality
+        <br>voc1=vote of confidence
+        <br>ipk1=ishwor prasad khatiwoda
+        <br>cm2=chief minister
+        <br>pc1=parliamentary culture
+    </p>
+    </div>
+    <p id="developedby"><u><b>Developed By:</b></u><br>Shiva Prasad Acharya (M.Sc.; LL.M)<br>
+      Shiva.Acharya@supremecourt.gov.np <br>परमा एकादशी, २०८०
+    </p>
+  </footer>
+</body>
+</html>
