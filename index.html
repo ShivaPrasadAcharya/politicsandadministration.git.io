@@ -1,8 +1,11 @@
+
 <!DOCTYPE html>
 <html>
 <head>
   <title>Politics and Administration</title>
   <style>
+    /* CSS classes to control visibility */
+
     body {
       font-family: 'Ludida Console';
     }
@@ -11,9 +14,10 @@
       background-color: #007bff;
       color: white;
       border: none;
-      padding: 8px 16px;
+      padding: 2px 2px;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      font-size: small;
     }
     /* Style for the active (toggled) buttons */
     button.active {
@@ -50,6 +54,15 @@
 
       /* Add other styles as needed */
     }
+
+    .xyz-details {
+      display: none;
+      /*this stop the detail content from displaying atutomatically.remove it if needed*/
+      font-size: small;
+      font-style: italic;
+
+      /* Add other styles as needed */
+    }
     .details-content {
       font-size: small;
       font-style: italic;
@@ -62,51 +75,89 @@
     .highlight {
             color: red;
         }
+        .hidden {
+      display: none;
+    }
+    .visible {
+      display: block;
+    }
+   
+    #copyRawDataButton, #copyContentButton{
+    background-color:grey;
+    }
+  
+   #loadStateButton, #saveStateButton{
+    background-color: brown;
+   }
+   
+  
+    #developedby {
+      font-style: italic;
+      color: brown;
+    }
+
+    .link-container {
+      position: fixed;
+      bottom: 90%;
+      left: 0;
+      right: 0;
+      text-align: bottom;
+    }
+
+    /* Style for the links */
+    .link-container a {
+      color: red;
+      text-decoration: none;
+      display: inline-block;
+      margin-right: 20px;
+      font-size: normal;
+    }
   </style>
 </head>
 <body>
+  <a id="TOP"></a>
   <h1>Politics and Administration</h1>
   <label for="input0">Parking1:</label>
   <textarea id="input0" placeholder="Enter text for Input 0:heading"></textarea><br>
-  <label for="input00">Parking2:</label>
-  <textarea id="input00" placeholder="Enter text for Input 00:heading"></textarea><br>
-  <button id="saveStateButton" onclick="savePageState()">Save State</button>
   <button id="loadStateButton" onclick="loadPageState()">Load State</button><br><br>
   <label for="input1">Input 1:</label>
-  <textarea id="input1" oninput="autoPopulateInputs()" placeholder="Enter text for Input 1:ID"></textarea>
-  <select id="pick">
-    <option value=""></option>
-    <option value="">111</option>
-    <option value="">112</option>
-    <option value="">902</option>
-  </select><br>
-  <label for="input2">Input 2:</label>
-  <textarea id="input2" placeholder="Enter text for Input 2:heading"></textarea><br>
-  <label for="input3">Input 3:</label>
-  <textarea id="input3" placeholder="Enter text for Input 3:content"></textarea><br>
-  <label for="input4">Input 4:</label>
-  <textarea id="input4" placeholder="Enter text for Input 4:fn1"></textarea><br>
-  <label for="input5">Input 5:</label>
-  <textarea id="input5" placeholder="Enter text for Input 5:fn2"></textarea><br>
-  <label for="input6">Input 6:</label>
-  <textarea id="input6" placeholder="Enter text for Input 6:fn3"></textarea><br>
-  <label for="input7">Input 7:</label>
-  <textarea id="input7" placeholder="Enter text for Input 7:title"></textarea><br>
-  <label for="input8">Input 8:</label>
-  <textarea id="input8" placeholder="Enter text for Input 8:link"></textarea><br>
-  <label for="input9">Input 9:</label>
-  <textarea id="input9" placeholder="Enter text for Input 9:accessed on:"></textarea><br>
+  <textarea id="input1" oninput="autoPopulateInputs()" placeholder="Enter text for Input 1:ID"></textarea><br>
+
+  <script>
+    //script for reproducing input fields
+    for (let i = 2; i <= 9; i++) {
+      // Create the label element
+      let label = document.createElement("label");
+      label.setAttribute("for", "input" + i);
+      label.innerText = "Input " + i + ":";
+
+      // Create the textarea element
+      let textarea = document.createElement("textarea");
+      textarea.setAttribute("id", "input" + i);
+      textarea.setAttribute("placeholder", "Enter text for Input " + i + ":fn" + (i - 3));
+
+      // Create a line break element
+      let br = document.createElement("br");
+
+      // Append the label, textarea, and line break elements to the document body or another container element
+      document.body.appendChild(label);
+      document.body.appendChild(textarea);
+      document.body.appendChild(br);
+    }
+  </script>
+    <a id="MIDDLE"></a>
   <label for="input10">Input 10:</label>
   <textarea id="input10" placeholder="Enter text for Input 10:Keywords"></textarea><br>
   <button id="showButton" onclick="toggleABC()">Show ABC</button>
-  <p id="output" style="display: none;"></p>
+  <button id="copyContentButton" onclick="copyContent()">Copy ABC</button>
   <!-- Add the Show All JKL button -->
   <button id="showAllJKLButton" onclick="toggleAllJKL()">Show All JKL</button>
-  <!-- Add the Show LMN button -->
   <button id="showLMNButton" onclick="toggleLMN()">Show LMN</button>
-  <!--content of jkl is visible here-->
-  <div id="jklContainer"></div>
-  <!--content of lmn is visible here-->
+  <button id="showXYZButton" onclick="toggleShowXYZ()">Show XYZ</button><br>
+  <p id="abcoutput" style="display: none;"></p>
+
+   <div id="jklContainer"></div>
+  <div id="xyzContainer"></div> 
   <div id="lmnContent" style="display: none;">
     <p id="lmnOutput"></p>
     <div id="lmnDetails" style="display: none;">
@@ -114,7 +165,20 @@
     </div>
   </div>
   </div>
+
+  <label for="input00">Parking2:</label>
+  <textarea id="input00" placeholder="Enter text for Input 00:heading"></textarea><br>
+  <textarea id="filterInput" placeholder="Enter filter command here"></textarea><br>
+  <button id="filterRawDataButton" onclick="toggleFilterRawData()">Filter Raw Data</button>
+  <!-- Add the Copy Raw Data button -->
+  <button id="copyRawDataButton" onclick="copyRawData()">Copy Raw Data</button>
+  <button id="saveStateButton" onclick="savePageState()">Save State</button>
+
+  <div id="filteredRawDataContainer"></div>
+  <!--content of filtered raw data is visible here-->
+
   <script>
+    //script for storing data array
     var valuesArray = [
 {input1: "111", input2: "<b><u> Crisis of Goodwill:</u></b>Article by Umesh Mainali", input3: " Breach of Social Contract Theory, Legitimacy Crisis, Campaign Against Government, Spiritualization of Employees, Quotes ", input4: "• <b>Democracy: </b>In democracy, the sovereign citizens trust and give their representatives both rights and resources. <br> • <b>Constitutional Bodies: </b>Apart from the SOP & CBP the constitution has made provision for various constitutional bodies to make the government self-controlled, self-restraint and not arbitrarily perform sensitive function. <br> • <b>State: </b>The ends of the state and its institutions is the welfare of the people. <br> • <b>Accountability: </b>The lack of accountability is theoretically the breach of social contract theory and practically government suffers from legitimacy crisis due to lack of trust. <br> • <b>Pork Barreling: </b>Legislature is being criticized for being more interested in 'pork barreling', increasing its own services and performing executive function, rather than creating laws according to society's demands. <br> <b><u>Campaign Against Governments:</u></b>1. Black life Matters in US; <br> 2.Hardik Patel's Anti-Reservation Campaign in Gujarat; <br> 3. Enough is Enough in Nepal; 4. Nilhism in Russia. <br><b><u>Quotes: </u></b> • 'Politics without principles, business without ethics, worship without faith has no meaning-Mahatma Gandhi <br>• Government is a trust and its officials are trustees- Henry Clay(American politician) <br>• No one lives in ivory tower<br>• 'Money is the sixth sense and without it the other five senses do not function.'-Somerset Maugham<br> • Public opinion is like a blind, strong demon that can be easily manipulated, but can be terrible when angered.-Bismark<br>• The crowd has only the head and no brain, but one should learn a lot from the wisdom of the crowd. <br> ", input5: "<b><u>Orbiter Dicta: </u></b> • A system is made up of principles, institutions and processes.<br> • Nihilism, also known as autocratic individualism of youth, was born in Russia in the nineteenth century in the name of opposition to government policies. Those who do not accept authority, do not follow religion, It was a kind of 'destructionism' that did not live in family life, which all European governments combined to suppress. <br>• State is for the protection wealth and wives*<br> <b><u>Spiritualization of Employees: </u></b>1. Newly recruited officers in Japan are first sent to a training institution called 'down to earth training' called 'Nippon Recruit Center' where humanitarian values ​​are taught. <br> 2. In Thailand, newly recruited police officers are given spiritual education by keeping them with monks in Buddhist monasteries. <br> 3.Bippasyana Meditation during service entry training was brought to practice but lacked continuation in Nepal.* <br><b><u>Concluding Remarks: </u></b> If politics can be purified and administration can be commercialized, the 'missing link' with the people can be found again.<br>", input6: "Note:*these are added from the reader's side<br>", input7: "साखको संकट, उमेश मैनाली ", input8: "https://ekantipur.com/opinion/2020/08/17/1597628521249281.html", input9: ", Article of 1 Bhadra, 2077", input10: "Umesh Mainali, government, bureaucracy, kantipur"},
 
@@ -127,6 +191,241 @@
       { input1: "902", input2: "", input3: "", input4: "", input5: "", input6: "", input7: "कोशी सरकारलाई दीर्घकालीन महत्वको निर्णय नगर्न सर्वोच्चको अन्तरिम आदेश", input8: "https://www.onlinekhabar.com/2023/08/1355308", input9: ", news on:24 August, 2023", input10: "{sc1, sb1, ipk1, io1, ioi1, sco1, pa1, higmat karki, uddav thapa, voc1, cm1, kp1, pc1, cm1, cm2, pg1}" },
       // Add more values as needed
     ];
+
+    var filteredValuesArray = []; // Array to store filtered data
+    </script>
+    <script>
+//script related to jkl button
+    var showAllJKLButton = document.getElementById("showAllJKLButton");
+    var jklContainer = document.getElementById("jklContainer");
+
+    // Function to update the content of the "JKL" button
+    function toggleAllJKL() {
+      if (jklContainer.innerHTML === '') {
+        // Generate JKL content from valuesArray if it's empty
+        for (var i = 0; i < valuesArray.length; i++) {
+          var input1Value = valuesArray[i].input1;
+          var input2Value = valuesArray[i].input2.replace(/</g, "<").replace(/>/g, ">");
+          var input3Value = valuesArray[i].input3.replace(/</g, "<").replace(/>/g, ">");
+          var input4Value = valuesArray[i].input4.replace(/</g, "<").replace(/>/g, ">");
+          var input5Value = valuesArray[i].input5.replace(/</g, "<").replace(/>/g, ">");
+          var input6Value = valuesArray[i].input6.replace(/</g, "<").replace(/>/g, ">");
+          var input7Value = valuesArray[i].input7.replace(/</g, "<").replace(/>/g, ">");
+          var input8Value = valuesArray[i].input8.replace(/</g, "<").replace(/>/g, ">");
+          var input9Value = valuesArray[i].input9.replace(/</g, "<").replace(/>/g, ">");
+          var input10Value = valuesArray[i].input10;
+          var jklContentText = '<u>' + input1Value + ': ' + input2Value + '</b></u>' + input3Value + ' + ';
+          jklContentText += '<a href="javascript:void(0)" onclick="toggleJKLDetails(event, ' + i + ')">[' + (i + 1) + ']</a>';
+          jklContentText += '<div id="jklDetails_' + i + '" class="jkl-details">' + input1Value + ":" + input4Value + input5Value + input6Value + input7Value + '<a href="' + input8Value + '">' + input8Value + '</a>' + input9Value + '</div>';
+          var jklContent = document.createElement("div");
+          jklContent.innerHTML = jklContentText;
+          jklContainer.appendChild(jklContent);
+        }
+        showAllJKLButton.textContent = "Hide All JKL"; // Update button text
+        showAllJKLButton.classList.add("active"); // Add "active" class
+      } else {
+        // Clear JKL content if it's not empty
+        jklContainer.innerHTML = '';
+        showAllJKLButton.textContent = "Show All JKL"; // Update button text
+        showAllJKLButton.classList.remove("active"); // Remove "active" class
+      }
+    }
+
+    // Toggle the visibility of JKL details
+
+    function toggleJKLDetails(event, index) {
+      event.preventDefault(); // Prevent the default anchor behavior
+      var detailsDiv = document.getElementById('jklDetails_' + index);
+      // Toggle the display of the clicked detail
+      if (detailsDiv.style.display === 'block') {
+        detailsDiv.style.display = 'none'; // Close the clicked detail
+      } else {
+        // Close all open details, (एउटा लिङ्क खोल्दा अर्को लिङ्कको content बन्द नगर्ने भए यो ३ लाइन हटाइदिनुहोस्)
+        var allDetails = document.querySelectorAll('.jkl-details');
+        allDetails.forEach(function (detail) {
+          detail.style.display = 'none';
+        });
+        // Open the clicked detail
+        detailsDiv.style.display = 'block';
+      }
+    }
+</script>
+<script>
+  //script related to xyz button (it partially depend on the text input of filter row data)
+    // Function to update the content of the "XYZ" button based on filtered data
+    function showFilteredXYZ() {
+      var xyzContainer = document.getElementById("xyzContainer");
+      xyzContainer.innerHTML = ''; // Clear previous content
+
+      if (filteredValuesArray.length === 0) {
+        xyzContainer.textContent = "CLICK Filter Raw Data first.";
+      } else {
+        // Generate XYZ content from filteredValuesArray
+        for (var i = 0; i < filteredValuesArray.length; i++) {
+          var input1Value = filteredValuesArray[i].input1;
+          var input2Value = filteredValuesArray[i].input2.replace(/</g, "<").replace(/>/g, ">");
+          var input3Value = filteredValuesArray[i].input3.replace(/</g, "<").replace(/>/g, ">");
+          var input4Value = filteredValuesArray[i].input4.replace(/</g, "<").replace(/>/g, ">");
+          var input5Value = filteredValuesArray[i].input5.replace(/</g, "<").replace(/>/g, ">");
+          var input6Value = filteredValuesArray[i].input6.replace(/</g, "<").replace(/>/g, ">");
+          var input7Value = filteredValuesArray[i].input7.replace(/</g, "<").replace(/>/g, ">");
+          var input8Value = filteredValuesArray[i].input8.replace(/</g, "<").replace(/>/g, ">");
+          var input9Value = filteredValuesArray[i].input9.replace(/</g, "<").replace(/>/g, ">");
+          var input10Value = filteredValuesArray[i].input10;
+          var xyzContentText = '<u>' + input1Value + ': ' + input2Value + '</b></u>' + input3Value + ' + ';
+          xyzContentText += '<a href="javascript:void(0)" onclick="toggleXYZDetails(event, ' + i + ')">[' + (i + 1) + ']</a>';
+          xyzContentText += '<div id="xyzDetails_' + i + '" class="xyz-details">' + input1Value + ":" + input4Value + input5Value + input6Value + input7Value + '<a href="' + input8Value + '">' + input8Value + '</a>' + input9Value + '</div>';
+          var xyzContent = document.createElement("div");
+             xyzContent.innerHTML = xyzContentText;
+          xyzContainer.appendChild(xyzContent);
+        }
+        //extra added later
+        showAllXYZButton.textContent = "Hide All XYZ"; // Update button text
+        showAllXYZButton.classList.add("active"); // Add "active" class
+      } 
+    }
+    // Toggle the visibility of XYZ details
+
+    function toggleXYZDetails(event, index) {
+      event.preventDefault(); // Prevent the default anchor behavior
+      var detailsDiv = document.getElementById('xyzDetails_' + index);
+      // Toggle the display of the clicked detail
+      if (detailsDiv.style.display === 'block') {
+        detailsDiv.style.display = 'none'; // Close the clicked detail
+      } else {
+        // Close all open details, 
+        var allDetails = document.querySelectorAll('.xyz-details');
+        allDetails.forEach(function (detail) {
+          detail.style.display = 'none';
+        });
+        // Open the clicked detail
+        detailsDiv.style.display = 'block';
+      }
+    }
+ //toggling the visibility of ShowXYZ and Filter Raw Data button
+ var showXYZButton = document.getElementById("showXYZButton");
+    var filterRawDataButton = document.getElementById("filterRawDataButton");
+
+    // Function to toggle the "Show XYZ" button text
+    var showXYZButton = document.getElementById("showXYZButton");
+    var filterRawDataButton = document.getElementById("filterRawDataButton");
+    var xyzContainer = document.getElementById("xyzContainer");
+    var filteredRawDataContainer = document.getElementById("filteredRawDataContainer");
+
+     // Function to toggle the "Show XYZ" button text and visibility
+ function toggleShowXYZ() {
+      if (xyzContainer.classList.contains("hidden")) {
+        showXYZButton.textContent = "Hide XYZ";
+        xyzContainer.classList.remove("hidden");
+        xyzContainer.classList.add("visible");
+        showXYZButton.classList.add("active"); // Add the active button class
+      } else {
+        showXYZButton.textContent = "Show XYZ";
+        xyzContainer.classList.remove("visible");
+        xyzContainer.classList.add("hidden");
+        showXYZButton.classList.remove("active"); // Remove the active button class
+      }
+      showFilteredXYZ(); // Call the function to update XYZ content
+    }
+</script>
+<script>
+    // Function to filter the raw data and display them in a new container
+    function filterRawData() {
+      var filterInput = document.getElementById('filterInput').value;
+      var filteredRawDataContainer = document.getElementById('filteredRawDataContainer');
+      filteredRawDataContainer.innerHTML = ''; // Clear previous content
+
+      var filteredRawData = [];
+
+      // Iterate through the raw data and apply the filter
+      valuesArray.forEach(function (item, index) {
+        var input10 = item.input10;
+        var filtered = false;
+        // Split the filter into terms using spaces
+        var filterTerms = filterInput.split(' ');
+        // Variables to track the current logical operator and result
+        var currentOperator = 'AND'; // Default to AND
+        var currentResult = true;
+        // Process each term in the filter
+        filterTerms.forEach(function (term) {
+          if (term.toUpperCase() === 'AND') {
+            currentOperator = 'AND';
+          } else if (term.toUpperCase() === 'OR') {
+            currentOperator = 'OR';
+          } else if (term.toUpperCase() === 'NOT') {
+            currentOperator = 'NOT';
+          } else {
+            if (currentOperator === 'AND') {
+              currentResult = currentResult && input10.includes(term);
+            } else if (currentOperator === 'OR') {
+              currentResult = currentResult || input10.includes(term);
+            } else if (currentOperator === 'NOT') {
+              currentResult = currentResult && !input10.includes(term);
+            }
+          }
+        });
+        // After processing all terms, the currentResult contains the final result
+        filtered = currentResult;
+        // If filtered, add the item to filteredRawData and display it
+        if (filtered) {
+          filteredRawData.push(item);
+        }
+      });
+
+      // Display the filtered raw data
+      if (filteredRawData.length === 0) {
+        filteredRawDataContainer.textContent = "No matching raw data found.";
+      } else {
+        // Generate content for the filtered raw data
+        for (var i = 0; i < filteredRawData.length; i++) {
+          var rawDataItem = filteredRawData[i];
+          var rawDataItemText = JSON.stringify(rawDataItem);
+          var rawDataItemDiv = document.createElement('div');
+          rawDataItemDiv.textContent = 'Raw Data ' + (i + 1) + ': ' + rawDataItemText;
+          filteredRawDataContainer.appendChild(rawDataItemDiv);
+        }
+      }
+      
+      // Update filteredValuesArray with the filtered data for XYZ button
+      filteredValuesArray = filteredRawData;
+    }
+    </script>
+    <script>
+   
+
+    // Function to toggle the "Filter Raw Data" button text and visibility
+    function toggleFilterRawData() {
+      if (filteredRawDataContainer.classList.contains("hidden")) {
+        filterRawDataButton.textContent = "Hide Raw Data";
+        filteredRawDataContainer.classList.remove("hidden");
+        filteredRawDataContainer.classList.add("visible");
+      } else {
+        filterRawDataButton.textContent = "Filter Raw Data";
+        filteredRawDataContainer.classList.remove("visible");
+        filteredRawDataContainer.classList.add("hidden");
+      }
+      filterRawData(); // Call the function to update filtered raw data content
+    }
+
+// Function to copy raw data to the clipboard
+function copyRawData() {
+  var rawDataContainer = document.getElementById("filteredRawDataContainer");
+
+  var range = document.createRange();
+  range.selectNode(rawDataContainer);
+
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(range);
+
+  document.execCommand("copy");
+
+  window.getSelection().removeAllRanges();
+  alert("Raw data copied to clipboard!");
+}
+
+  </script>
+  <script>
+   //script for autopopulating the input fields and shortcut key as well as sanitization
     var mainTextVisible = false;
     var lmnContentVisible = false;
     var lmnDetailsVisible = false;
@@ -169,48 +468,85 @@
         document.getElementById("input10").value = "";
       }
     }
-    var showAllJKLButton = document.getElementById("showAllJKLButton");
-    var jklContainer = document.getElementById("jklContainer");
-    // Toggle the visibility of all JKL content
-    function toggleAllJKL() {
-      if (jklContainer.innerHTML === '') {
-        // Generate JKL content if it's empty
-        for (var i = 0; i < valuesArray.length; i++) {
-          var input1Value = valuesArray[i].input1;
-          var input2Value = valuesArray[i].input2.replace(/</g, "<").replace(/>/g, ">");
-          var input3Value = valuesArray[i].input3.replace(/</g, "<").replace(/>/g, ">");
-          var input4Value = valuesArray[i].input4.replace(/</g, "<").replace(/>/g, ">");
-          var input5Value = valuesArray[i].input5.replace(/</g, "<").replace(/>/g, ">");
-          var input6Value = valuesArray[i].input6.replace(/</g, "<").replace(/>/g, ">");
-          var input7Value = valuesArray[i].input7.replace(/</g, "<").replace(/>/g, ">");
-          var input8Value = valuesArray[i].input8.replace(/</g, "<").replace(/>/g, ">");
-          var input9Value = valuesArray[i].input9.replace(/</g, "<").replace(/>/g, ">");
-          var input10Value = valuesArray[i].input10;
-          var jklContentText = '<u>' + input1Value + ': ' + input2Value + '</b></u>' + input3Value + ' + ';
-          jklContentText += '<a href="javascript:void(0)" onclick="toggleJKLDetails(event, ' + i + ')">[' + (i + 1) + ']</a>';
-          jklContentText += '<div id="jklDetails_' + i + '" class="jkl-details">' + input1Value + ":" + input4Value + input5Value + input6Value + input7Value + '<a href="' + input8Value + '">' + input8Value + '</a>' + input9Value + '</div>';
-          var jklContent = document.createElement("div");
-          jklContent.innerHTML = jklContentText;
-          jklContainer.appendChild(jklContent);
-        }
-        showAllJKLButton.textContent = "Hide All JKL"; // Update button text
-        showAllJKLButton.classList.add("active"); // Add "active" class
-      } else {
-        // Clear JKL content if it's not empty
-        jklContainer.innerHTML = '';
-        showAllJKLButton.textContent = "Show All JKL"; // Update button text
-        showAllJKLButton.classList.remove("active"); // Remove "active" class
+     
+    // Function to format the date as "dd Month Name, yyyy-hrhr:minmin"into input field 9
+    function formatDate(date) {
+      const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
+      const day = date.getDate();
+      const monthName = months[date.getMonth()];
+      const year = date.getFullYear();
+      const hours = date.getHours().toString().padStart(2, '0'); // Add leading zero if necessary
+      const minutes = date.getMinutes().toString().padStart(2, '0'); // Add leading zero if necessary
+      return `, Accessed on:${day} ${monthName}, ${year}-${hours}:${minutes}`;
+    }
+    // Function to handle the Ctrl + D + T key combination
+    function handleCtrlDT(event) {
+      if (event.ctrlKey && event.key === "d") {
+        // Prevent the default behavior of the key combination
+        event.preventDefault();
+        // Generate the current date and time in the desired format
+        const currentDate = new Date();
+        const formattedDate = formatDate(currentDate);
+        // Insert the formatted date into input 9
+        document.getElementById("input9").value = formattedDate;
       }
     }
-    // Toggle the visibility of JKL details
-    function toggleJKLDetails(index) {
-      var detailsDiv = document.getElementById('jklDetails_' + index);
-      if (detailsDiv.style.display === 'none') {
-        detailsDiv.style.display = 'block';
-      } else {
-        detailsDiv.style.display = 'none';
+    // Add an event listener to the document for keydown events
+    document.addEventListener("keydown", handleCtrlDT);
+
+     //Using enter key etc. to enter #x003C;br> etc. in input field
+    function addLineBreak(event) {
+      if (event.key === "Enter" && event.ctrlKey) {
+        event.preventDefault();
+        var input = event.target;
+        var cursorPosition = input.selectionStart;
+        var currentValue = input.value;
+        var newValue =
+          currentValue.substring(0, cursorPosition) +
+          "<br>" +
+          currentValue.substring(cursorPosition);
+        input.value = newValue;
+        input.setSelectionRange(cursorPosition + 4, cursorPosition + 4);
       }
+      if (event.key === "b" && event.ctrlKey) {
+        event.preventDefault();
+        var input = event.target;
+        var cursorPosition = input.selectionStart;
+        var currentValue = input.value;
+        var newValue =
+          currentValue.substring(0, cursorPosition) +
+          "<b>" +
+          "</b>" +
+          currentValue.substring(cursorPosition);
+        input.value = newValue;
+        input.setSelectionRange(cursorPosition + 3, cursorPosition + 3);
+      }
+      if (event.key === "u" && event.ctrlKey) {
+        event.preventDefault();
+        var input = event.target;
+        var cursorPosition = input.selectionStart;
+        var currentValue = input.value;
+        var newValue =
+          currentValue.substring(0, cursorPosition) +
+          "<u>" +
+          "</u>" +
+          currentValue.substring(cursorPosition);
+        input.value = newValue;
+        input.setSelectionRange(cursorPosition + 3, cursorPosition + 3);
+      }
+
     }
+    var inputFields = document.querySelectorAll("input, textarea");
+    inputFields.forEach(function (input) {
+      input.addEventListener("keydown", addLineBreak);
+    });
+    </script>
+    <script>
+//script for LMN button
+
     // Toggle the visibility of LMN content
     function toggleLMN() {
       var lmnContent = document.getElementById("lmnContent");
@@ -269,37 +605,13 @@
       lmnDetails.style.display = "none";
       lmnDetailsVisible = false;
     }
-    // Function to format the date as "dd Month Name, yyyy-hrhr:minmin"into input field 9
-    function formatDate(date) {
-      const months = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-      ];
-      const day = date.getDate();
-      const monthName = months[date.getMonth()];
-      const year = date.getFullYear();
-      const hours = date.getHours().toString().padStart(2, '0'); // Add leading zero if necessary
-      const minutes = date.getMinutes().toString().padStart(2, '0'); // Add leading zero if necessary
-      return `, Accessed on:${day} ${monthName}, ${year}-${hours}:${minutes}`;
-    }
-    // Function to handle the Ctrl + D + T key combination
-    function handleCtrlDT(event) {
-      if (event.ctrlKey && event.key === "d") {
-        // Prevent the default behavior of the key combination
-        event.preventDefault();
-        // Generate the current date and time in the desired format
-        const currentDate = new Date();
-        const formattedDate = formatDate(currentDate);
-        // Insert the formatted date into input 9
-        document.getElementById("input9").value = formattedDate;
-      }
-    }
-    // Add an event listener to the document for keydown events
-    document.addEventListener("keydown", handleCtrlDT);
+    </script>
+   <script>
+    //script for ABC button
     // Toggle the visibility of ABC content
     var mainTextVisible = false; // Declare the variable
     function toggleABC() {
-      var output = document.getElementById("output");
+      var output = document.getElementById("abcoutput");
       var showButton = document.getElementById("showButton");
       mainTextVisible = !mainTextVisible;
       if (mainTextVisible) {
@@ -325,52 +637,9 @@
         showButton.classList.remove("active"); // Remove "active" class}
       }
     }
-    //Using enter key etc. to enter #x003C;br> etc. in input field
-    function addLineBreak(event) {
-      if (event.key === "Enter" && event.ctrlKey) {
-        event.preventDefault();
-        var input = event.target;
-        var cursorPosition = input.selectionStart;
-        var currentValue = input.value;
-        var newValue =
-          currentValue.substring(0, cursorPosition) +
-          "<br>" +
-          currentValue.substring(cursorPosition);
-        input.value = newValue;
-        input.setSelectionRange(cursorPosition + 4, cursorPosition + 4);
-      }
-      if (event.key === "b" && event.ctrlKey) {
-        event.preventDefault();
-        var input = event.target;
-        var cursorPosition = input.selectionStart;
-        var currentValue = input.value;
-        var newValue =
-          currentValue.substring(0, cursorPosition) +
-          "<b>" +
-          "</b>" +
-          currentValue.substring(cursorPosition);
-        input.value = newValue;
-        input.setSelectionRange(cursorPosition + 3, cursorPosition + 3);
-      }
-      if (event.key === "u" && event.ctrlKey) {
-        event.preventDefault();
-        var input = event.target;
-        var cursorPosition = input.selectionStart;
-        var currentValue = input.value;
-        var newValue =
-          currentValue.substring(0, cursorPosition) +
-          "<u>" +
-          "</u>" +
-          currentValue.substring(cursorPosition);
-        input.value = newValue;
-        input.setSelectionRange(cursorPosition + 3, cursorPosition + 3);
-      }
+    </script>
 
-    }
-    var inputFields = document.querySelectorAll("input, textarea");
-    inputFields.forEach(function (input) {
-      input.addEventListener("keydown", addLineBreak);
-    });
+   
   </script>
   <!-- this script is for saving and loading the page from the very position -->
   <script>
@@ -383,7 +652,7 @@
           mainTextVisible: mainTextVisible,
           lmnContentVisible: lmnContentVisible,
           lmnDetailsVisible: lmnDetailsVisible,
-          outputContent: document.getElementById("output").textContent,
+          outputContent: document.getElementById("abcoutput").textContent,
           showAllJKLButtonActive: showAllJKLButton.classList.contains("active"),
           jklContainerContent: jklContainer.innerHTML,
           showLMNButtonActive: showLMNButton.classList.contains("active"),
@@ -433,7 +702,7 @@
             toggleDetails();
           }
           // Restore output content and button states
-          document.getElementById("output").textContent = pageState.outputContent;
+          document.getElementById("abcoutput").textContent = pageState.outputContent;
           if (pageState.showAllJKLButtonActive) {
             toggleAllJKL();
           }
@@ -449,120 +718,30 @@
         }
       } else {
         alert(
-          "Local storage is not available. Your browser may be in private mode or have local storage disabled. " +
-          "This feature requires local storage to work properly."
+          "Local storage is not available."
         );
       }
     }
   </script>
-  <!-- script for preventing scroll to top on click of hyperlink -->
-  <script>
-    function toggleJKLDetails(event, index) {
-      event.preventDefault(); // Prevent the default anchor behavior
-      var detailsDiv = document.getElementById('jklDetails_' + index);
-      // Toggle the display of the clicked detail
-      if (detailsDiv.style.display === 'block') {
-        detailsDiv.style.display = 'none'; // Close the clicked detail
-      } else {
-        // Close all open details, (एउटा लिङ्क खोल्दा अर्को लिङ्कको content बन्द नगर्ने भए यो ३ लाइन हटाइदिनुहोस्)
-        var allDetails = document.querySelectorAll('.jkl-details');
-        allDetails.forEach(function (detail) {
-          detail.style.display = 'none';
-        });
-        // Open the clicked detail
-        detailsDiv.style.display = 'block';
-      }
-    }
-  </script><textarea id="filterInput" placeholder="Enter filter command here"></textarea>
-  <button id="filterButton">Hide Filtered Content</button>
-  <div id="filteredContainer"></div>
-  <script>
-    // Function to display a message in a pop-up window
-    function displayMessage(message) {
-      alert(message); // You can replace 'alert' with a more customized pop-up dialog.
-    }
-    // Function to hide the filtered content
-    function hideFilteredContent() {
-      var filteredContainer = document.getElementById('filteredContainer');
-      filteredContainer.style.display = 'none';
-    }
-    // Function to show the filtered content
-    function showFilteredContent() {
-      var filteredContainer = document.getElementById('filteredContainer');
-      filteredContainer.style.display = 'block';
-    }
-    // Function to clear the filtered content
-    function clearFilteredContent() {
-      var filteredContainer = document.getElementById('filteredContainer');
-      filteredContainer.innerHTML = ''; // Clear the content
-    }
-    // Function to apply the filter
-    function applyFilter(filter) {
-      // Clear the filtered container
-      clearFilteredContent();
-      // Iterate through the data array and apply the filter
-      valuesArray.forEach(function (item, index) {
-        var input10 = item.input10;
-        var filtered = false;
-        // Split the filter into terms using spaces
-        var filterTerms = filter.split(' ');
-        // Variables to track the current logical operator and result
-        var currentOperator = 'AND'; // Default to AND
-        var currentResult = true;
-        // Process each term in the filter
-        filterTerms.forEach(function (term) {
-          if (term.toUpperCase() === 'AND') {
-            currentOperator = 'AND';
-          } else if (term.toUpperCase() === 'OR') {
-            currentOperator = 'OR';
-          } else if (term.toUpperCase() === 'NOT') {
-            currentOperator = 'NOT';
-          } else {
-            if (currentOperator === 'AND') {
-              currentResult = currentResult && input10.includes(term);
-            } else if (currentOperator === 'OR') {
-              currentResult = currentResult || input10.includes(term);
-            } else if (currentOperator === 'NOT') {
-              currentResult = currentResult && !input10.includes(term);
-            }
-          }
-        });
-        // After processing all terms, the currentResult contains the final result
-        filtered = currentResult;
-        // If filtered, display the item in the filtered container
-        if (filtered) {
-          var filteredContainer = document.getElementById('filteredContainer');
-          var itemDiv = document.createElement('div');
-          itemDiv.textContent = 'Item ' + (index + 1) + ': ' + JSON.stringify(item);
-          filteredContainer.appendChild(itemDiv);
-        }
-      });
-      // If no matches are found, display a message in a pop-up window
-      var filteredContainer = document.getElementById('filteredContainer');
-      if (filteredContainer.childElementCount === 0) {
-        displayMessage("No matches found.");
-      } else {
-        showFilteredContent();
-      }
-    }
-    // Event listener for the filter button
-    var filterButton = document.getElementById('filterButton');
-    filterButton.addEventListener('click', function () {
-      var filterInput = document.getElementById('filterInput').value;
-      var buttonText = filterButton.textContent;
-      if (buttonText === 'Hide Filtered Content') {
-        // Hide all filtered content and toggle button text
-        hideFilteredContent();
-        filterButton.textContent = 'Show Filtered Content';
-      } else {
-        // Apply the filter and toggle button text
-        applyFilter(filterInput);
-        filterButton.textContent = 'Hide Filtered Content';
-      }
-    });
-  </script>
-  
-   <a id="BOTTOM"></a>
+   <script>
+     // Function to copy the content to the clipboard
+  function copyContent() {
+    var output = document.getElementById("abcoutput");
+    var textToCopy = output.textContent;
+
+    var textarea = document.createElement("textarea");
+    textarea.value = textToCopy;
+    document.body.appendChild(textarea);
+
+    textarea.select();
+    document.execCommand("copy");
+
+    document.body.removeChild(textarea);
+
+    alert("Content copied to clipboard");
+  }
+</script>
+<a id="BOTTOM"></a>
   <footer>
     <div id="abbr">
       <p>
@@ -592,6 +771,11 @@
         <br>cm2=chief minister
         <br>pc1=parliamentary culture
     </p>
+    </div>
+    <div class="link-container">
+      <a href="#TOP">&#x25B2;</a>
+      <a href="#MIDDLE">X&#772;</a>
+      <a href="#BOTTOM">&#x25BC;</a>
     </div>
     <p id="developedby"><u><b>Developed By:</b></u><br>Shiva Prasad Acharya (M.Sc.; LL.M)<br>
       Shiva.Acharya@supremecourt.gov.np <br>परमा एकादशी, २०८०
