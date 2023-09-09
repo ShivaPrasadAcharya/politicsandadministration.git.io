@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -148,7 +149,7 @@
     <a id="MIDDLE"></a>
   <label for="input10">Input 10:</label>
   <textarea id="input10" placeholder="Enter text for Input 10:Keywords"></textarea><br>
-  <button id="showButton" onclick="toggleABC()">Show ABC</button>
+  <button id="showABCButton" onclick="toggleABC()">Show ABC</button>
   <button id="copyContentButton" onclick="copyContent()">Copy ABC</button>
   <!-- Add the Show All JKL button -->
   <button id="showAllJKLButton" onclick="toggleAllJKL()">Show All JKL</button>
@@ -612,7 +613,7 @@ function copyRawData() {
     var mainTextVisible = false; // Declare the variable
     function toggleABC() {
       var output = document.getElementById("abcoutput");
-      var showButton = document.getElementById("showButton");
+      var showABCButton = document.getElementById("showABCButton");
       mainTextVisible = !mainTextVisible;
       if (mainTextVisible) {
         var input1Value = document.getElementById("input1").value.replace(/</g, "<").replace(/>/g, ">");
@@ -626,15 +627,15 @@ function copyRawData() {
         var input9Value = document.getElementById("input9").value.replace(/</g, "<").replace(/>/g, ">");
         var input10Value = document.getElementById("input10").value;
         output.textContent = '{input1: "' + input1Value + '", input2: "' + input2Value + '", input3: "' + input3Value + '", input4: "' + input4Value + '", input5: "' + input5Value + '", input6: "' + input6Value + '", input7: "' + input7Value + '", input8: "' + input8Value + '", input9: "' + input9Value + '", input10: "' + input10Value + '"}' + ",";
-        showButton.innerHTML = "Hide ABC";
-        showButton.classList.add("active"); // Add "active" class
+        showABCButton.innerHTML = "Hide ABC";
+        showABCButton.classList.add("active"); // Add "active" class
         output.style.display = "block";
-        showButton.textContent = "Hide ABC";
+        showABCButton.textContent = "Hide ABC";
       } else {
         output.style.display = "none";
-        showButton.textContent = "Show ABC";
-        showButton.innerHTML = "Show ABC";
-        showButton.classList.remove("active"); // Remove "active" class}
+        showABCButton.textContent = "Show ABC";
+        showABCButton.innerHTML = "Show ABC";
+        showABCButton.classList.remove("active"); // Remove "active" class}
       }
     }
     </script>
